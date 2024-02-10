@@ -3,6 +3,7 @@ import 'datatables.net-select'
 import 'datatables.net-responsive-bs5'
 import 'vue3-toastify/dist/index.css'
 import NewPurchaseModalVue from './components/NewPurchaseModal.vue'
+import StateButton from './components/StateButton.vue'
 import {backendRequest} from '../../utils/request'
 
 export default {
@@ -11,11 +12,23 @@ export default {
         this.purchases = await backendRequest('api/v1/purchases')
     },
     components:{
-        NewPurchaseModalVue
+        NewPurchaseModalVue,
+        StateButton
     },
     data(){
         return{
             purchases:[]
+        }
+    },
+    methods:{
+        async ChangeStatus(data){
+            const {state, index, id} = data
+            this.purchases[index].status = state
+            const purchase = {
+                id: id,
+                status: state
+            }
+            await backendRequest('api/v1/purchases/status', 'PUT', purchase)
         }
     }
 };
@@ -50,7 +63,7 @@ export default {
                             <td>{{purchase.cost}}</td>
                             <td>{{purchase.payment_method}}</td>
                             <td>{{purchase.store}}</td>
-                            <td>{{purchase.status}}</td>
+                            <td><StateButton :state="purchase.status" :index="index" :id="purchase.id" @change-status="ChangeStatus"></StateButton></td>
                         </tr>
                     </tbody>
                 </table>

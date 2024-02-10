@@ -16,4 +16,7 @@ export default defineComponent({
 </script>
 
 <style>
+a{
+  cursor: pointer;
+}
 </style>
