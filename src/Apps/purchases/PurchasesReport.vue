@@ -74,14 +74,14 @@ export default {
                     </li>
                 </ul>
             </div>
-            <div class="card-body">
+            <div class="card-body table-responsive">
                 <table class="table table-hover mt-4">
                     <thead class="table-dark">
                         <tr>
                             <th>Persona</th>
                             <th>Articulo</th>
                             <th>Monto</th>
-                            <th>Tienda</th>
+                            <th class="d-none d-sm-block">Tienda</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -90,7 +90,7 @@ export default {
                             <td>{{purchase.user_purchase}}</td>
                             <td>{{purchase.description}}</td>
                             <td>{{purchase.cost}}</td>
-                            <td>{{purchase.store}}</td>
+                            <td class="d-none d-sm-block">{{purchase.store}}</td>
                             <td><StateButton :state="purchase.status" :index="index" :id="purchase.id" @change-status="ChangeStatus"></StateButton></td>
                         </tr>
                     </tbody>
@@ -99,7 +99,7 @@ export default {
                             <td>Total:</td>
                             <td></td>
                             <td>{{ amount }}</td>
-                            <td></td>
+                            <td class="d-none d-sm-block"></td>
                             <td></td>
                         </tr>
                     </tfoot>
