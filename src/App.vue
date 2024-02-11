@@ -19,4 +19,7 @@ export default defineComponent({
 a{
   cursor: pointer;
 }
+.nav-item{
+  align-self: center;
+}
 </style>
