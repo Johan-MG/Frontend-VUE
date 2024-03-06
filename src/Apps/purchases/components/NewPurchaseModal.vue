@@ -33,7 +33,7 @@ export default {
                 status: this.status
             }
             console.log(purchase)
-            await backendRequest('api/v1/purchases/create', 'POST', purchase)
+            await backendRequest('api/v1/purchases/create', 'POST', null, purchase)
             location.reload();
         }
     }

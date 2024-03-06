@@ -1,17 +1,18 @@
 import { toast } from 'vue3-toastify'
 
-export const backendRequest = (endpoint: string, method:string, body:JSON) =>{
-    const URL = `http://localhost:3000/${endpoint}`
+export const backendRequest = (endpoint: string, method:string, parameters:JSON, body:JSON) =>{
+    const setEndpoint = setParameters(endpoint, parameters)
+    const URL = `http://localhost:3000/${setEndpoint}`
 
     const headers = new Headers({
-        'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud es JSON
-        'Authorization': 'Bearer tu_token', // Ejemplo de encabezado de autorización
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer tu_token',
       });
 
     const requestOptions = {
-        method: method || "GET", // Puedes cambiar a 'GET', 'PUT', 'DELETE', etc.
+        method: method || "GET", 
         headers: headers,
-        body: JSON.stringify(body), // Convierte el objeto a JSON
+        body: JSON.stringify(body), 
       };
 
     return new Promise((resolve, reject) => {
@@ -28,3 +29,13 @@ export const backendRequest = (endpoint: string, method:string, body:JSON) =>{
         });
     })
 }
+
+function setParameters(endpont:string, parameters:JSON) {
+    if(parameters == undefined || parameters == null) return endpont
+
+    const parametersClened = Object.entries(parameters)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+  
+    return `${endpont}?${parametersClened}`;
+  }

@@ -4,32 +4,62 @@ import 'datatables.net-responsive-bs5'
 import 'vue3-toastify/dist/index.css'
 import NewPurchaseModalVue from './components/NewPurchaseModal.vue'
 import StateButton from './components/StateButton.vue'
+import DateFilter from './components/DateFilter.vue'
 import {backendRequest} from '../../utils/request'
 
 export default {
-    
+    beforeMount(){
+        this.setDates()
+    },
     async mounted(){
-        this.purchases = await backendRequest('api/v1/purchases')
+        this.getPurchases()
     },
     components:{
         NewPurchaseModalVue,
-        StateButton
+        StateButton,
+        DateFilter
     },
     data(){
         return{
             purchases:[],
-            personToFilter: "Todos"
+            personToFilter: "Todos",
+            start:"",
+            end:""
         }
     },
     methods:{
         async ChangeStatus(data){
             const {state, index, id} = data
-            this.purchases[index].status = state
+            this.purchasesFiltered[index].status = state
             const purchase = {
                 id: id,
                 status: state
             }
             await backendRequest('api/v1/purchases/status', 'PUT', purchase)
+        },
+        FilterbyDate(dates){
+            this.start = dates.start
+            this.end = dates.end
+            
+            this.getPurchases()
+        },
+        setDates(){
+            const now = new Date()
+            if(now.getDate>=15){
+                this.start = `${now.getFullYear()}-${(now.getMonth()+1).toLocaleString('en-US', {minimumIntegerDigits: 2})}-15`
+                this.end = `${now.getFullYear()}-${(now.getMonth()+2).toLocaleString('en-US', {minimumIntegerDigits: 2})}-15`
+            }else{
+                const month = now.getMonth() == 0 ? 12 : now.getMonth().toLocaleString('en-US', {minimumIntegerDigits: 2})
+                this.start = `${now.getFullYear()}-${month}-15`
+                this.end = `${now.getFullYear()}-${(now.getMonth()+1).toLocaleString('en-US', {minimumIntegerDigits: 2})}-15`
+            }
+        },
+        async getPurchases(){
+            const parameter = {
+                start:this.start,
+                end:this.end
+            }
+            this.purchases = await backendRequest('api/v1/purchases', 'GET', parameter)
         }
     },
     computed:{
@@ -72,6 +102,9 @@ export default {
                             <label for="personSelect">Filtrar por:</label>
                         </div>
                     </li>
+                    <li class="nav-item" style="display: flex;">
+                        <DateFilter :start="start" :end="end" @change-date="FilterbyDate"></DateFilter>
+                    </li>
                 </ul>
             </div>
             <div class="card-body table-responsive">
@@ -81,7 +114,7 @@ export default {
                             <th>Persona</th>
                             <th>Articulo</th>
                             <th>Monto</th>
-                            <th class="d-none d-sm-block">Tienda</th>
+                            <th>Tienda</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -90,7 +123,7 @@ export default {
                             <td>{{purchase.user_purchase}}</td>
                             <td>{{purchase.description}}</td>
                             <td>{{purchase.cost}}</td>
-                            <td class="d-none d-sm-block">{{purchase.store}}</td>
+                            <td>{{purchase.store}}</td>
                             <td><StateButton :state="purchase.status" :index="index" :id="purchase.id" @change-status="ChangeStatus"></StateButton></td>
                         </tr>
                     </tbody>
@@ -99,7 +132,7 @@ export default {
                             <td>Total:</td>
                             <td></td>
                             <td>{{ amount }}</td>
-                            <td class="d-none d-sm-block"></td>
+                            <td></td>
                             <td></td>
                         </tr>
                     </tfoot>
