@@ -19,7 +19,7 @@ export const backendRequest = (endpoint: string, method:string, parameters:JSON,
         fetch(URL, requestOptions).then(response =>{
             if(!response.ok){
                 toast["error"]("Error al realizar la petición")
-                throw new Error('La respuesta no fue exitosa');
+                //throw new Error('La respuesta no fue exitosa');
             }
             return response.json()
         }).then(data =>{

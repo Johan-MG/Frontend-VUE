@@ -16,6 +16,7 @@ export default {
             store_selected: null,
             methods: paymentMethod,
             method_selected: null,
+            months: 1,
             cost:null,
             description: null,
             status: "PENDING"
@@ -29,6 +30,7 @@ export default {
                 cost: this.cost,
                 description: this.description,
                 payment_method: this.method_selected,
+                months: this.months,
                 store: this.store_selected,
                 status: this.status
             }
@@ -68,7 +70,7 @@ export default {
                             <label for="inputCost" class="form-label">Costo</label>
                             <input type="number" class="form-control" id="inputCost" v-model="cost">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="inputMethod" class="form-label">Método de Pago</label>
                             <select class="form-select" id="inputMethod" v-model="method_selected">
                                 <option 
@@ -78,6 +80,16 @@ export default {
                                     >
                                     {{ method.name }}
                                 </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="inputMonth" class="form-label">Meses</label>
+                            <select class="form-select" id="inputMonth" v-model="months">
+                                <option value=1>1 mes</option>
+                                <option value=3>3 meses</option>
+                                <option value=6>6 meses</option>
+                                <option value=9>9 meses</option>
+                                <option value=12>12 meses</option>
                             </select>
                         </div>
                         <div class="col-md-6">

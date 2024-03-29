@@ -1,5 +1,4 @@
 <script>
-import $ from 'jquery';
 export default {
     name: 'StateButton',
     props:["index","id","state"],

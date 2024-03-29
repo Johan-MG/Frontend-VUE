@@ -35,7 +35,7 @@ export default {
                 id: id,
                 status: state
             }
-            await backendRequest('api/v1/purchases/status', 'PUT', purchase)
+            await backendRequest('api/v1/purchases/status', 'PUT', null, purchase)
         },
         FilterbyDate(dates){
             this.start = dates.start
@@ -45,7 +45,7 @@ export default {
         },
         setDates(){
             const now = new Date()
-            if(now.getDate>=15){
+            if(now.getDate()>=15){
                 this.start = `${now.getFullYear()}-${(now.getMonth()+1).toLocaleString('en-US', {minimumIntegerDigits: 2})}-15`
                 this.end = `${now.getFullYear()}-${(now.getMonth()+2).toLocaleString('en-US', {minimumIntegerDigits: 2})}-15`
             }else{
