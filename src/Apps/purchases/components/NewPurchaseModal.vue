@@ -25,7 +25,7 @@ export default {
     methods:{
         async createPurchase(){
             const purchase = {
-                user_pay: 1,
+                //user_pay: 1,
                 user_purchase: this.person_selected,
                 cost: this.cost,
                 description: this.description,
